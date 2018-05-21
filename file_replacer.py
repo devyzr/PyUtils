@@ -19,18 +19,23 @@ for file in all_files:
     for r_file in replacement_files:
         r_file_split = r_file.split(sep)
         replacement_filename = r_file_split[-1]
-        if replacement_filename in file:
+        dest_filename = file.split(sep)
+        dest_filename = dest_filename[-1]
+        if replacement_filename == dest_filename:
             try:
                 copyfile(r_file, file)
-                print('Successfully copied %s to %s.' % (r_file, file))
+                short_r_file = r_file.replace('replacement_folder\\', '')
+                print('Successfully copied "%s" to "%s".'
+                      % (short_r_file, file))
                 copied_files.append(r_file)
             except OSError:
-                print('Could not write %s into %s, destination directory not'
-                      ' writeable.'
+                print('Could not write "%s" into "%s", destination directory'
+                      ' not writeable.'
                       % (r_file, file))
             except SameFileError:
-                print('%s is already the same as %s.' % (r_file, file))
+                print('"%s" is already the same as "%s".' % (r_file, file))
 
 for r_file in replacement_files:
     if r_file not in copied_files:
-        print('%s was not copied.' % r_file)
+        short_r_file = r_file.replace('replacement_folder\\', '')
+        print('"%s" was not copied.' % short_r_file)
